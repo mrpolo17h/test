@@ -1,0 +1,39 @@
+pipeline:
+  frontend:
+    image: node:8.3.0
+    group: testing
+    environment:
+      - TOKEN=12345678
+    # secrets:
+    #   - source: TOKEN1
+    #     target: TOKEN2
+    commands:
+      - yarn install
+      - echo ${DRONE_BUILD_NUMBER}
+      - sleep 60
+    when:
+      environment: production
+      event: deployment      
+      
+  backend:
+    image: node:8.3.0
+    group: testing
+    # environment:
+    #   - TOKEN=12345678
+    # secrets: 
+    #   - source: TOKEN1
+    #     target: TOKEN3
+    commands:
+      - yarn install
+      - echo $TOKEN2
+      - echo $TOKEN3
+    when:
+      branch: develop
+
+  create-master-build-number:
+    image: node:8.3.0
+    commands: 
+      - echo ${DRONE_BUILD_NUMBER}
+      - echo test
+    when:
+      branch: master
